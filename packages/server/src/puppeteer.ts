@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 // @ts-ignore
-const tweetfree = require("../tweetfree/index");
+import tweetfree from "tweetfree";
 dotenv.config();
 
 export async function postTweet(
@@ -32,7 +32,9 @@ export async function replyTweet(
   userId: string,
   tweetId: string
 ): Promise<void> {
-  const client = new tweetfree({ debug: process.env.DEBUG_MODE ?? false });
+  const client = new tweetfree({
+    debug: process.env.DEBUG_MODE ?? false,
+  });
 
   if (
     !process.env.TWITTER_EMAIL ||

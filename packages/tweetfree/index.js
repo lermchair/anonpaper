@@ -189,7 +189,6 @@ module.exports = class Twitter {
 
     const tweetModal = await this.page.$x(this.xpaths[action]);
     await tweetModal[0].click();
-    console.log("Clicked...");
 
     if (action === "retweet") {
       const tweetModal = await this.page.$x(this.xpaths["retweet_confirm"]);
