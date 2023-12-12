@@ -1,6 +1,8 @@
 import cors from "cors";
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+import ogs from "open-graph-scraper";
+
 import tweetfree from "tweetfree";
 
 dotenv.config();
@@ -86,6 +88,30 @@ app.post("/reply/:user/:tweetId", async (req: Request, res: Response) => {
     res.send({ message: "Replied to Tweet successfully" });
   } catch (error) {
     res.status(500).send({ message: "Error replying to tweet", error });
+  }
+});
+
+app.get("/fetch-opengraph", async (req, res) => {
+  const url = req.query.url as string;
+
+  if (!url) {
+    return res.status(400).send("URL is required");
+  }
+
+  const options = { url };
+  try {
+    const { result } = await ogs(options);
+    if (result.success) {
+      if (result.ogTitle && result.ogDescription) {
+        res.json({ title: result.ogTitle, description: result.ogDescription });
+      } else {
+        res.status(404).send("OpenGraph data not found");
+      }
+    } else {
+      res.status(500).send("Error fetching OpenGraph data");
+    }
+  } catch (error) {
+    res.status(500).send("Server error");
   }
 });
 
