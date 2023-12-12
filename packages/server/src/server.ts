@@ -1,7 +1,7 @@
 import cors from "cors";
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import { postTweet, replyTweet } from "./puppeteer";
+import tweetfree from "tweetfree";
 
 dotenv.config();
 
@@ -22,7 +22,26 @@ app.post("/tweet", async (req: Request, res: Response) => {
   }
 
   try {
-    await postTweet(content, link);
+    const client = new tweetfree({
+      debug: Boolean(process.env.DEBUG_MODE) ?? false,
+    });
+
+    if (
+      !process.env.TWITTER_EMAIL ||
+      !process.env.TWITTER_PASSWORD ||
+      !process.env.TWITTER_USERNAME
+    ) {
+      throw new Error("Need to set Twitter credentials in .env");
+    }
+
+    await client.init();
+    await client.login({
+      email: process.env.TWITTER_EMAIL,
+      password: process.env.TWITTER_PASSWORD,
+      username: process.env.TWITTER_USERNAME,
+    });
+
+    await client.tweet(`${content}\n\n${link}`);
     res.send({ message: "Tweet posted successfully" });
   } catch (error) {
     res.status(500).send({ message: "Error posting tweet", error });
@@ -40,7 +59,30 @@ app.post("/reply/:user/:tweetId", async (req: Request, res: Response) => {
   }
 
   try {
-    await replyTweet(content, user, tweetId);
+    const client = new tweetfree({
+      debug: Boolean(process.env.DEBUG_MODE) ?? false,
+    });
+
+    if (
+      !process.env.TWITTER_EMAIL ||
+      !process.env.TWITTER_PASSWORD ||
+      !process.env.TWITTER_USERNAME
+    ) {
+      throw new Error("Need to set Twitter credentials in .env");
+    }
+
+    await client.init();
+    await client.login({
+      email: process.env.TWITTER_EMAIL,
+      password: process.env.TWITTER_PASSWORD,
+      username: process.env.TWITTER_USERNAME,
+    });
+
+    console.log("Content: ", content);
+    console.log("userId: ", user);
+    console.log("tweetId: ", tweetId);
+
+    await client.execute("reply", { user, id: tweetId, content });
     res.send({ message: "Replied to Tweet successfully" });
   } catch (error) {
     res.status(500).send({ message: "Error replying to tweet", error });

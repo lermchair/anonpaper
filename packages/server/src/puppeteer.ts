@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-// @ts-ignore
 import tweetfree from "tweetfree";
 dotenv.config();
 
@@ -7,7 +6,9 @@ export async function postTweet(
   tweetContent: string,
   link: string
 ): Promise<void> {
-  const client = new tweetfree({ debug: process.env.DEBUG_MODE ?? false });
+  const client = new tweetfree({
+    debug: Boolean(process.env.DEBUG_MODE) ?? false,
+  });
 
   if (
     !process.env.TWITTER_EMAIL ||
@@ -24,7 +25,7 @@ export async function postTweet(
     username: process.env.TWITTER_USERNAME,
   });
 
-  await client.tweet({ content: `${tweetContent}\n\n${link}` });
+  await client.tweet(`${tweetContent}\n\n${link}`);
 }
 
 export async function replyTweet(
@@ -33,7 +34,7 @@ export async function replyTweet(
   tweetId: string
 ): Promise<void> {
   const client = new tweetfree({
-    debug: process.env.DEBUG_MODE ?? false,
+    debug: Boolean(process.env.DEBUG_MODE) ?? false,
   });
 
   if (

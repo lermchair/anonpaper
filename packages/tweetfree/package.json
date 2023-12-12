@@ -1,13 +1,28 @@
 {
   "dependencies": {
-    "puppeteer": "^19.6.3"
+    "puppeteer": "^21.6.0"
   },
   "name": "tweetfree",
   "description": "Twitter's API, reconstructed utilizing `puppeteer` for emulating user behavior, for free.",
   "version": "1.0.1",
-  "main": "index.js",
-  "devDependencies": {},
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "index": [
+        "./src/index.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "tsup": "^8.0.1"
+  },
   "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
