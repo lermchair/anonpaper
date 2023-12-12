@@ -12,6 +12,13 @@ interface InvalidComment {
   reason: string | undefined;
 }
 
+const userAgents = [
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36",
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15",
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36 Edg/102.0.1245.39",
+];
+
 export default function Page({ params }: { params: { paper: string[] } }) {
   const [data, setData] = useState<ArxivData | undefined>(undefined);
   const [comment, setComment] = useState<string | undefined>(undefined);
@@ -37,7 +44,12 @@ export default function Page({ params }: { params: { paper: string[] } }) {
       const apiUrl = `http://export.arxiv.org/api/query?id_list=${arxivId}`;
 
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+          headers: {
+            "User-Agent":
+              userAgents[Math.floor(Math.random() * userAgents.length)],
+          },
+        });
         if (!response.ok) {
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
