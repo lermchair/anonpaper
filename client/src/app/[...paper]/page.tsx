@@ -42,7 +42,6 @@ export default function Page({ params }: { params: { paper: string[] } }) {
   useEffect(() => {
     async function fetchArxivData(arxivId: string) {
       const apiUrl = `http://export.arxiv.org/api/query?id_list=${arxivId}`;
-
       try {
         const response = await fetch(apiUrl, {
           headers: {
@@ -74,12 +73,17 @@ export default function Page({ params }: { params: { paper: string[] } }) {
         const id = linkSplit[linkSplit.length - 1];
         const data = await fetchArxivData(id);
         setData(data);
-      } else if (link.includes("twitter.com") || link.includes("x.com")) {
+      } else if (link.includes("twitter.com")) {
         setTwitterEmbedUrl(link);
+      } else if (link.includes("x.com")) {
+        const linkSplit = link.split("/");
+        linkSplit[1] = "twitter.com";
+        const newLink = linkSplit.join("/");
+        setTwitterEmbedUrl(newLink);
       }
     };
     fetchData();
-  }, [data, params.paper, twitterEmbedUrl]);
+  }, [data, params.paper]);
 
   if (!data && !twitterEmbedUrl) {
     return <span>Loading...</span>;

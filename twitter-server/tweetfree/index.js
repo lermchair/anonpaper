@@ -42,9 +42,9 @@ module.exports = class Twitter {
       retweet_confirm:
         '//*[@id="layers"]/div[2]/div/div/div/div[2]/div/div[3]/div/div/div/div',
       reply:
-        '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[3]/div/div/div/div/div[2]/div[1]/div/div/div/div[2]/div[1]/div/div/div/div/div[1]/div/div/div/div/div/label/div[1]/div/div',
+        '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[1]/div/div/div/div/div[2]/div[1]/div/div/div/div[2]/div[1]/div/div/div/div/div[1]/div/div/div/div/div/label/div[1]/div',
       reply_confirm:
-        '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[3]/div/div/div/div/div[2]/div[2]/div/div/div/div[2]/div[2]/div[2]/div/div/div/div[2]',
+        '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[1]/div/div/div/div/div[2]/div[2]/div/div/div/div[2]/div[2]/div[2]/div/div/div/div[2]',
 
       profile_overlay:
         '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[3]/div/div/div/div',
@@ -189,6 +189,7 @@ module.exports = class Twitter {
 
     const tweetModal = await this.page.$x(this.xpaths[action]);
     await tweetModal[0].click();
+    console.log("Clicked...");
 
     if (action === "retweet") {
       const tweetModal = await this.page.$x(this.xpaths["retweet_confirm"]);
