@@ -111,7 +111,7 @@ app.get("/fetch-opengraph", async (req, res) => {
       res.status(500).send("Error fetching OpenGraph data");
     }
   } catch (error) {
-    res.status(500).send("Server error");
+    res.status(500).send("Server error: " + JSON.stringify(error));
   }
 });
 

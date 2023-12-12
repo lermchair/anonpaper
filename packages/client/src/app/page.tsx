@@ -1,12 +1,8 @@
 "use client";
 
 import PaperPreview from "@/components/PaperPreview";
+import { LinkMetadata, fetchData, isValidUrl } from "@/lib/metadata";
 import { useEffect, useState } from "react";
-
-interface LinkMetadata {
-  title: string;
-  description: string;
-}
 
 interface InvalidComment {
   reason: string | undefined;
@@ -23,15 +19,6 @@ export default function Home() {
     InvalidComment | undefined
   >();
 
-  function isValidUrl(str: string) {
-    try {
-      new URL(str);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   useEffect(() => {
     if (comment.length > 280) {
       setInvalidComment({ reason: "Message is too long" });
@@ -42,26 +29,15 @@ export default function Home() {
     }
   }, [comment]);
 
-  useEffect(() => {
-    const fetchData = async (link: string) => {
-      if (isValidUrl(link)) {
-        const metaData = await fetch(
-          `http://localhost:4000/fetch-opengraph?url=${link}`, // TODO: fix
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await metaData.json();
-        setLinkMetadata(data);
-      }
-    };
+  async function getData(link: string) {
+    const data = await fetchData(link);
+    setLinkMetadata(data);
+  }
 
+  useEffect(() => {
     if (link && isValidUrl(link)) {
       setShowCommentInput(true);
-      fetchData(link);
+      getData(link);
     } else {
       setShowCommentInput(false);
       setLinkMetadata(undefined);
