@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "puppeteer": "^19.8.0"
+    "puppeteer": "^21.6.0"
   },
   "name": "tweetfree",
   "description": "Twitter's API, reconstructed utilizing `puppeteer` for emulating user behavior, for free.",
