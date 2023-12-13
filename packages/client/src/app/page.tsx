@@ -36,15 +36,18 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (link && isValidUrl(link)) {
-      setShowCommentInput(true);
-      setLoadingMetadata(true);
-      getData(link);
-      setLoadingMetadata(false);
-    } else {
-      setShowCommentInput(false);
-      setLinkMetadata(undefined);
-    }
+    const debounceTimeout = setTimeout(() => {
+      if (link && isValidUrl(link)) {
+        setShowCommentInput(true);
+        setLoadingMetadata(true);
+        getData(link).then(() => setLoadingMetadata(false));
+      } else {
+        setShowCommentInput(false);
+        setLinkMetadata(undefined);
+      }
+    }, 500);
+
+    return () => clearTimeout(debounceTimeout);
   }, [link]);
 
   return (
