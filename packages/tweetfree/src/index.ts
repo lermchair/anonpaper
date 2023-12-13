@@ -1,4 +1,9 @@
-import puppeteer, { Browser, ElementHandle, Page } from "puppeteer";
+import puppeteer, {
+  Browser,
+  ElementHandle,
+  Page,
+  PuppeteerLaunchOptions,
+} from "puppeteer";
 import fs from "fs";
 import { DEFAULT_XPATHS } from "./xpaths";
 
@@ -23,7 +28,7 @@ class Twitter {
   }
 
   async init() {
-    const options = { headless: true };
+    const options: PuppeteerLaunchOptions = { headless: "new" };
 
     if (this.debug) options.headless = false;
     console.log("Debug mode:", this.debug);
@@ -86,6 +91,7 @@ class Twitter {
     if (!this.page) return;
     const modal = await this.xpathToContent("modal_helper");
     if (!modal) return;
+    console.log("Logging in...");
 
     if (!modal.includes("Sign in")) return;
     await this.page.goto("https://twitter.com/i/flow/login");
@@ -97,6 +103,7 @@ class Twitter {
       console.error("Email input not found");
       return;
     }
+    console.log("Typing email");
     await emailInput.type(email, this.defaultType);
 
     const nextButton = await this.page.waitForXPath(
@@ -112,6 +119,7 @@ class Twitter {
     const usernameText = await this.xpathToContent("modal_helper");
     if (!usernameText) return;
 
+    console.log("Typing username");
     if (usernameText.includes("Enter your phone number or username")) {
       const usernameInput = await this.page.waitForXPath(
         this.xpaths.verification_username,
@@ -134,6 +142,7 @@ class Twitter {
       await (nextButtonVerify as ElementHandle<Element>).click();
     }
 
+    console.log("Typing password");
     await this.inputPassword(password);
 
     const nextButtonLogin = await this.page.waitForXPath(
@@ -150,26 +159,35 @@ class Twitter {
   }
 
   async tweet(content: string) {
+    console.log("Tweeting...");
     if (!this.page) return;
     const activeURL = await this.page.url();
+    console.log("Active URL is: ", activeURL);
     const url = `https://twitter.com/home`;
 
     if (activeURL !== url) await this.page.goto(url);
 
+    console.log("Looking for tweet div");
+    console.log(JSON.stringify(this.page.content));
+    // write a screenshot to a file
+    // await this.page.screenshot({ path: "example.png" });
     await this.page.waitForXPath(this.xpaths.tweet_div);
-
+    console.log("Looking for tweet modal");
     const tweetModal = await this.page.$x(this.xpaths.tweet_modal);
     if (!tweetModal) {
       console.error("Tweet modal not found");
       return;
     }
+    console.log("Clicking tweet modal");
     await (tweetModal[0] as ElementHandle<Element>).click();
+    console.log("Typing tweet");
     await tweetModal[0].type(content, this.defaultType);
 
     const nextButton = await this.page.waitForXPath(this.xpaths.tweet_enter, {
       visible: true,
     });
     await (nextButton as ElementHandle<Element>).click();
+    console.log("Successfully tweeted");
 
     await this.sleep(500);
   }

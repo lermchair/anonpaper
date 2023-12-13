@@ -44,9 +44,12 @@ app.post("/tweet", async (req: Request, res: Response) => {
       username: process.env.TWITTER_USERNAME,
     });
 
+    console.log("Tweeting...");
     await client.tweet(`${content}\n\n${link}`);
+    console.log("Done tweeting");
     res.send({ message: "Tweet posted successfully" });
   } catch (error) {
+    console.error(error);
     res.status(500).send({ message: "Error posting tweet", error });
   }
 });
