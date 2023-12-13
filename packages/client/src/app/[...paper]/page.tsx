@@ -3,7 +3,6 @@
 import PaperPreview from "@/components/PaperPreview";
 import { LinkMetadata, fetchData } from "@/lib/metadata";
 import { useEffect, useState } from "react";
-import * as xml2js from "xml2js";
 
 export interface ArxivData {
   title: string;
@@ -89,6 +88,7 @@ export default function Page({ params }: { params: { paper: string[] } }) {
               setComment(e.target.value);
             }}
           />
+          {/* TODO: refactor all this */}
           {!invalidComment ? (
             <button
               onClick={() => {
