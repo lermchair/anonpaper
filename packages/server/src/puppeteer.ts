@@ -6,8 +6,9 @@ export async function postTweet(
   tweetContent: string,
   link: string
 ): Promise<void> {
+  console.log("Dee bug: ", Boolean(process.env.DEBUG_MODE) ?? false);
   const client = new tweetfree({
-    debug: Boolean(process.env.DEBUG_MODE) ?? false,
+    debug: Boolean(process.env.DEBUG_MODE),
   });
 
   if (

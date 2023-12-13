@@ -18,12 +18,15 @@ class Twitter {
 
     this.browser = null;
     this.page = null;
+
+    console.log("Constructed with debug: ", this.debug);
   }
 
   async init() {
     const options = { headless: true };
 
     if (this.debug) options.headless = false;
+    console.log("Debug mode:", this.debug);
 
     console.log("Launching browser");
     this.browser = await puppeteer.launch(options);

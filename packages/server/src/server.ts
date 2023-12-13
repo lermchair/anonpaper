@@ -24,8 +24,9 @@ app.post("/tweet", async (req: Request, res: Response) => {
   }
 
   try {
+    if (!process.env.DEBUG_MODE) return;
     const client = new tweetfree({
-      debug: Boolean(process.env.DEBUG_MODE) ?? false,
+      debug: false,
     });
 
     if (
