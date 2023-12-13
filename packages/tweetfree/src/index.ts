@@ -28,7 +28,19 @@ class Twitter {
   }
 
   async init() {
-    const options: PuppeteerLaunchOptions = { headless: "new" };
+    const options: PuppeteerLaunchOptions = {
+      headless: "new",
+      executablePath:
+        process.env.NODE_ENV === "production"
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath(),
+      args: [
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote",
+      ],
+    };
 
     if (this.debug) options.headless = false;
     console.log("Debug mode:", this.debug);
