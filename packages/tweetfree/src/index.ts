@@ -11,11 +11,6 @@ class Twitter {
   page: Page | null;
   constructor({ debug }: { debug: Boolean }) {
     this.debug = debug;
-
-    /**
-     * @typedef { puppeteer.Page } page
-     */
-
     this.xpaths = DEFAULT_XPATHS;
     this.defaultType = { delay: 30 };
     this.sleep = (waitTimeInMs) =>
@@ -30,7 +25,9 @@ class Twitter {
 
     if (this.debug) options.headless = false;
 
+    console.log("Launching browser");
     this.browser = await puppeteer.launch(options);
+    console.log("Creating page");
     this.page = await this.browser.newPage();
 
     if (fs.existsSync("cookies.json")) {
@@ -39,8 +36,10 @@ class Twitter {
       const deserializedCookies = JSON.parse(cookies);
       await this.page.setCookie(...deserializedCookies);
     }
+    console.log("Navigating to twitter.com");
 
     await this.page.goto("https://twitter.com/home");
+    console.log("Done initializing");
   }
 
   async inputPassword(password: string) {

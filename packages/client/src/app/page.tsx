@@ -107,7 +107,7 @@ export default function Home() {
                 if (!apiUrl) {
                   throw new Error("TWITTER_SERVER_URL .env var not set");
                 }
-                fetch(`${apiUrl}/tweet/`, {
+                fetch(`${apiUrl}/tweet`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
