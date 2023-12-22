@@ -17,6 +17,7 @@ async function startServer() {
       process.env.NODE_ENV === "production"
         ? process.env.PUPPETEER_EXECUTABLE_PATH
         : puppeteer.executablePath(),
+    headless: process.env.NODE_ENV === "production" ? "new" : false,
   });
 
   app.use(express.json());

@@ -59,7 +59,10 @@ export class TwitterServer {
 
   async checkLogin() {
     debug("Checking login status...");
-    if (this.isLoggedIn) return;
+    if (this.isLoggedIn) {
+      debug("Already logged in");
+      return;
+    }
     if (!this.page) return;
     if (this.page.url() !== "https://twitter.com/home")
       await this.page.goto("https://twitter.com/home");
