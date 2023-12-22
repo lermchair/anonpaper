@@ -8,6 +8,8 @@ interface InvalidComment {
   reason: string | undefined;
 }
 
+type PostStatus = "ready" | "loading" | "success" | "error";
+
 export default function Home() {
   const [link, setLink] = useState<string>("");
   const [comment, setComment] = useState<string>("");
@@ -19,6 +21,7 @@ export default function Home() {
   const [invalidComment, setInvalidComment] = useState<
     InvalidComment | undefined
   >();
+  const [postStatus, setPostStatus] = useState<PostStatus>("ready");
 
   useEffect(() => {
     if (comment.length > 280) {
@@ -49,6 +52,21 @@ export default function Home() {
 
     return () => clearTimeout(debounceTimeout);
   }, [link]);
+
+  function renderPostStatus(status: PostStatus) {
+    switch (status) {
+      case "ready":
+        return "Post anonymously";
+      case "loading":
+        return "Posting...";
+      case "success":
+        return "Successfully posted!";
+      case "error":
+        return "Error. Try again.";
+      default:
+        return "Post anonymously";
+    }
+  }
 
   return (
     <main>
@@ -105,12 +123,13 @@ export default function Home() {
           )}
           {!invalidComment ? (
             <button
-              onClick={() => {
+              onClick={async () => {
                 const apiUrl = process.env.NEXT_PUBLIC_TWITTER_SERVER_URL;
                 if (!apiUrl) {
                   throw new Error("TWITTER_SERVER_URL .env var not set");
                 }
-                fetch(`${apiUrl}/tweet`, {
+                setPostStatus("loading");
+                const req = await fetch(`${apiUrl}/tweet`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -120,10 +139,15 @@ export default function Home() {
                     link: `${window.location.href}${link}`,
                   }),
                 });
+                if (req.status !== 200) {
+                  setPostStatus("error");
+                } else {
+                  setPostStatus("success");
+                }
               }}
               className="font-medium p-2 py-4 bg-indigo-500 text-white rounded-md mt-4 hover:bg-indigo-400 transition-all ease"
             >
-              Post anonymously
+              {renderPostStatus(postStatus)}
             </button>
           ) : (
             <>
@@ -133,6 +157,17 @@ export default function Home() {
                 </div>
               )}
             </>
+          )}
+          {postStatus === "success" && (
+            <a
+              href={`https://twitter.com/${process.env.NEXT_PUBLIC_TWITTER_USERNAME}/with_replies`}
+            >
+              <div className="mt-4 text-center flex items-center justify-center p-2 border border-blue-500 rounded-md cursor-pointer">
+                <span className="font-semibold text-blue-500">
+                  See your post here
+                </span>
+              </div>
+            </a>
           )}
           <div className="mt-3 text-center text-slate-600">
             <p>Or add anonpaper.org before your link.</p>
