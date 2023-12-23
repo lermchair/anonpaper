@@ -24,6 +24,18 @@ export default function Home() {
   const [postStatus, setPostStatus] = useState<PostStatus>("ready");
 
   useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://platform.twitter.com/widgets.js";
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []); //
+
+  useEffect(() => {
     if (comment.length > 280) {
       setInvalidComment({ reason: "Message is too long" });
     } else if (comment.length === 0) {
@@ -176,6 +188,15 @@ export default function Home() {
               /https://arxiv.org/abs/1706.03762
             </p>
           </div>
+        </div>
+        <div className="mt-4">
+          <a
+            data-dnt="true"
+            className="twitter-timeline"
+            href={`https://twitter.com/${process.env.NEXT_PUBLIC_TWITTER_USERNAME}?ref_src=twsrc%5Etfw`}
+          >
+            View Twitter Bot
+          </a>
         </div>
       </div>
     </main>
