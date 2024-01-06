@@ -12,11 +12,10 @@ export function isValidUrl(str: string) {
   }
 }
 
-export const fetchData = async (link: string) => {
+export const fetchMetadata = async (link: string) => {
   if (!link.startsWith("https://") && !link.startsWith("http://")) {
     link = "https://" + link;
   }
-  console.log(link);
   if (isValidUrl(link)) {
     const apiUrl = process.env.NEXT_PUBLIC_TWITTER_SERVER_URL;
     if (!apiUrl) {
