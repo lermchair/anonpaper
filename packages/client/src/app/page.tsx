@@ -182,9 +182,9 @@ export default function Home() {
             </a>
           )}
           <div className="mt-3 text-center text-slate-600">
-            <p>Or add anonpaper.org before your link.</p>
+            <p>Or add anonpaper.com before your link.</p>
             <p className="break-words">
-              i.e. <span className="text-blue-500">anonpaper.org</span>
+              i.e. <span className="text-blue-500">anonpaper.com</span>
               /https://arxiv.org/abs/1706.03762
             </p>
           </div>
