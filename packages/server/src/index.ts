@@ -50,6 +50,7 @@ async function startServer() {
         .send({ message: "Tweet ID, content & user are required" });
     }
     try {
+      await client.reply(user, tweetId, content);
       res.json({ message: "Replied to Tweet successfully" });
     } catch (error) {
       res.status(500).send({ message: "Error replying to tweet", error });
