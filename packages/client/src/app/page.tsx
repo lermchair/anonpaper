@@ -5,10 +5,6 @@ import PaperPreview from "@/components/PaperPreview";
 import { PostStatus, Progress } from "@/components/Progress";
 import { useEffect, useState } from "react";
 
-interface InvalidComment {
-  reason: string | undefined;
-}
-
 export default function Home() {
   const [link, setLink] = useState<string>("");
   const [postStatus, setPostStatus] = useState<PostStatus>(undefined);
