@@ -19,8 +19,8 @@ export async function generateMetadata({
   const url = buildUrl(link);
   const metadata = await fetchMetadata(url);
   return {
-    title: "Anon Paper",
-    description: "Anonymously comment on papers.",
+    title: `${metadata.title} — Anon Paper`,
+    description: "Anonymously comment on this paper.",
     openGraph: {
       images: [
         {
