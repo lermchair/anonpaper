@@ -3,6 +3,7 @@
 import { Comment } from "@/components/Comment";
 import PaperPreview from "@/components/PaperPreview";
 import { PostStatus, Progress } from "@/components/Progress";
+import { postComment } from "@/lib/post";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -45,27 +46,16 @@ export default function Home() {
             <div className="mt-4">
               <PaperPreview link={link} />
               <Comment
-                handleSubmit={async (comment) => {
-                  const apiUrl = process.env.NEXT_PUBLIC_TWITTER_SERVER_URL;
-                  if (!apiUrl) {
-                    throw new Error("TWITTER_SERVER_URL .env var not set");
-                  }
-                  setPostStatus("loading");
-                  const req = await fetch(`${apiUrl}/tweet`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
+                handleSubmit={async (comment, captchaToken) => {
+                  await postComment(
+                    `/tweet`,
+                    {
                       content: comment,
                       link: `${window.location.href}${link}`,
-                    }),
-                  });
-                  if (req.status !== 200) {
-                    setPostStatus("error");
-                  } else {
-                    setPostStatus("success");
-                  }
+                    },
+                    captchaToken,
+                    setPostStatus
+                  );
                 }}
               />
             </div>

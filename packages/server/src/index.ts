@@ -57,6 +57,26 @@ async function startServer() {
     }
   });
 
+  app.post("/verify", async (req: Request, res: Response) => {
+    const token: string = req.body.token;
+    console.log("Verifying captcha...");
+    try {
+      const response = await fetch(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET}&response=${token}`,
+        {
+          method: "POST",
+        }
+      );
+      if (response.status == 200) {
+        return res.status(200).send({ message: "Captcha verified" });
+      } else {
+        throw new Error("Unable to verify captcha");
+      }
+    } catch (error) {
+      res.status(500).send({ message: "Unable to verify captcha", error });
+    }
+  });
+
   app.get("/fetch-opengraph", async (req, res) => {
     const url = req.query.url as string;
 

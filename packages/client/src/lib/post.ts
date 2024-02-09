@@ -3,6 +3,7 @@ import { PostStatus } from "@/components/Progress";
 export const postComment = async (
   url: string,
   data: { content: string; link?: string },
+  captchaToken: string,
   onProgress: (progress: PostStatus) => void
 ) => {
   const apiUrl = process.env.NEXT_PUBLIC_TWITTER_SERVER_URL;
@@ -13,7 +14,19 @@ export const postComment = async (
 
   onProgress("loading");
   try {
-    const response = await fetch(`${apiUrl}/${url}`, {
+    const verifyCaptcha = await fetch(`${apiUrl}/verify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token: captchaToken }),
+    });
+
+    if (verifyCaptcha.status !== 200) {
+      throw new Error("Captcha failed");
+    }
+
+    const response = await fetch(`${apiUrl}${url}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,10 +35,8 @@ export const postComment = async (
     });
 
     if (response.status !== 200) {
-      onProgress("error");
-      return;
+      throw new Error("Failed to post comment");
     }
-
     onProgress("success");
   } catch (error) {
     onProgress("error");

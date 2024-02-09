@@ -66,7 +66,7 @@ export default function Page({ params }: { params: { paper: string[] } }) {
           </div>
         )}
         <Comment
-          handleSubmit={async (comment) => {
+          handleSubmit={async (comment, captchaToken) => {
             if (previewUrl?.includes("twitter.com")) {
               const [
                 _protocol,
@@ -76,10 +76,15 @@ export default function Page({ params }: { params: { paper: string[] } }) {
                 _path,
                 tweetId,
               ] = previewUrl.split("/");
-              const path = `reply/${twitterUserId}/${tweetId}`;
-              await postComment(path, { content: comment }, (progress) => {
-                setPostStatus(progress);
-              });
+              const path = `/reply/${twitterUserId}/${tweetId}`;
+              await postComment(
+                path,
+                { content: comment },
+                captchaToken,
+                (progress) => {
+                  setPostStatus(progress);
+                }
+              );
             } else {
               await postComment(
                 `/tweet`,
@@ -87,6 +92,7 @@ export default function Page({ params }: { params: { paper: string[] } }) {
                   content: comment,
                   link: window.location.href,
                 },
+                captchaToken,
                 (progress) => {
                   setPostStatus(progress);
                 }
