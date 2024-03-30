@@ -69,6 +69,9 @@ importers:
 
   packages/server:
     dependencies:
+      '@twitter-api-v2/plugin-rate-limit':
+        specifier: ^1.1.0
+        version: 1.1.0(twitter-api-v2@1.16.0)
       cors:
         specifier: ^2.8.5
         version: 2.8.5
@@ -93,6 +96,9 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.10.5)(typescript@5.3.3)
+      twitter-api-v2:
+        specifier: ^1.16.0
+        version: 1.16.0
     devDependencies:
       '@types/cors':
         specifier: ^2.8.17
@@ -450,6 +456,14 @@ packages:
 
   /@tsconfig/node16@1.0.4:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+    dev: false
+
+  /@twitter-api-v2/plugin-rate-limit@1.1.0(twitter-api-v2@1.16.0):
+    resolution: {integrity: sha512-5nUk0w0s1yzzMe+NLN5BlKzwgl9OHkF1Makb5Xje1ntCO1H1fGq0qli80WRvcrpcwKZcSckRkXd4HEksh2LZ6g==}
+    peerDependencies:
+      twitter-api-v2: ^1.11.0
+    dependencies:
+      twitter-api-v2: 1.16.0
     dev: false
 
   /@types/body-parser@1.19.5:
@@ -4108,6 +4122,10 @@ packages:
       turbo-windows-64: 1.11.2
       turbo-windows-arm64: 1.11.2
     dev: true
+
+  /twitter-api-v2@1.16.0:
+    resolution: {integrity: sha512-e7wzWqx5oQZ9IUc2xt8JiJ84ioVGlmjmca1h0NwCKx2AFfKXDePmQa42gcBDe0qau9YaHsIpzO9z5SX1fmb+IQ==}
+    dev: false
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}

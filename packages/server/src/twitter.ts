@@ -65,7 +65,9 @@ export class TwitterServer {
     }
     if (!this.page) return;
     if (this.page.url() !== "https://twitter.com/home")
-      await this.page.goto("https://twitter.com/home");
+      await this.page.goto("https://twitter.com/home", {
+        waitUntil: "networkidle0",
+      });
     if (fs.existsSync("./cookies.json")) {
       const cookies = fs.readFileSync("cookies.json", "utf8");
       const deserializedCookies = JSON.parse(cookies);
